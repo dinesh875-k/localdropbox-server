@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Local Dropbox</title>
+</head>
+<body>
+
+<h2>Upload File</h2>
+<input type="file" id="fileInput">
+<button onclick="upload()">Upload</button>
+
+<h2>Files</h2>
+<ul id="fileList"></ul>
+
+<script>
+function upload() {
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) return alert("Choose a file!");
+
+  const data = new FormData();
+  data.append("file", file);
+
+  fetch("/upload", {
+    method: "POST",
+    body: data
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Upload failed");
+    loadFiles();
+  })
+  .catch(err => alert(err.message));
+}
+
+function loadFiles() {
+  fetch("/files")
+    .then(res => res.json())
+    .then(files => {
+      const list = document.getElementById("fileList");
+      list.innerHTML = "";
+      files.forEach(f => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="/download/${f}">${f}</a>`;
+        list.appendChild(li);
+      });
+    });
+}
+
+loadFiles();
+</script>
+
+</body>
+</html>
