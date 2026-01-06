@@ -1,3 +1,10 @@
+
+# Maven
+target/
+
+# Runtime storage (VERY IMPORTANT)
+storage/
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
